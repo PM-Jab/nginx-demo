@@ -9,8 +9,8 @@ server {
         add_header Content-Type text/plain;
     }
 
-    location /v1/demo {
-        set $upstream_demo "${UPSTREAM_URL}/hello";
+    location ~ ^/v1/demo(/.*)?$ {
+        set $upstream_demo "${UPSTREAM_URL}/hello$1$is_args$args";
         proxy_pass $upstream_demo;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -20,8 +20,8 @@ server {
         proxy_next_upstream error timeout http_502 http_503 http_504;
     }
 
-    location /v1/hi {
-        set $upstream_hi "${UPSTREAM_URL}/hi";
+    location ~ ^/v1/hi(/.*)?$ {
+        set $upstream_hi "${UPSTREAM_URL}/hi$1$is_args$args";
         proxy_pass $upstream_hi;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
