@@ -1,0 +1,20 @@
+server {
+    listen ${PORT};
+    server_name _;
+
+    location /v1/demo {
+        proxy_pass ${UPSTREAM_URL}/hello;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /v1/hi {
+        proxy_pass ${UPSTREAM_URL}/hi;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
