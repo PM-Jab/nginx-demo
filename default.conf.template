@@ -1,4 +1,4 @@
-resolver ${NGINX_LOCAL_RESOLVERS} ipv6=on valid=10s;
+resolver __RESOLVERS__ ipv6=on valid=10s;
 
 server {
     listen ${PORT};
