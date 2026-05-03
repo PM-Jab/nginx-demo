@@ -1,3 +1,5 @@
+resolver ${NGINX_LOCAL_RESOLVERS} ipv6=on valid=10s;
+
 server {
     listen ${PORT};
     server_name _;
@@ -8,18 +10,24 @@ server {
     }
 
     location /v1/demo {
-        proxy_pass ${UPSTREAM_URL}/hello;
+        set $upstream_demo "${UPSTREAM_URL}/hello";
+        proxy_pass $upstream_demo;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 5s;
+        proxy_next_upstream error timeout http_502 http_503 http_504;
     }
 
     location /v1/hi {
-        proxy_pass ${UPSTREAM_URL}/hi;
+        set $upstream_hi "${UPSTREAM_URL}/hi";
+        proxy_pass $upstream_hi;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 5s;
+        proxy_next_upstream error timeout http_502 http_503 http_504;
     }
 }
